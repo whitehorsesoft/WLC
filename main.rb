@@ -9,7 +9,8 @@ end
 def urls
   {
     summary: "WLC_Intro.html",
-    Q1_50:   "WLC_001-050.html"
+    Q1_50:   "WLC_001-050.html",
+    proofs: "WLC_fn_001-050.html"
   }.transform_values do |url|
     mainpath + url
   end
@@ -45,8 +46,16 @@ def questions
   return results
 end
 
-def footnote(path)
-  
+def footnotes
+  # Net::HTTP.get(URI(urls[:proofs]))
+  results = Hash.new
+  open(URI(urls[:proofs])) do |rs|
+    rs.each_line do |line|
+      unless /<a name=\"fn(?'num'\d+).*<\/a> <strong>(?'verse'.*)\.<\/strong>/.match(line).nil?
+        puts sprintf("num: %i, verse: %s", $~[:num], $~[:verse])
+      end
+    end
+  end
 end
 
 def phrases(answer)
