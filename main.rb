@@ -51,11 +51,23 @@ def footnotes
   results = Hash.new
   open(URI(urls[:proofs])) do |rs|
     rs.each_line do |line|
-      unless /<a name=\"fn(?'num'\d+).*<\/a> <strong>(?'verse'.*)\.<\/strong>/.match(line).nil?
-        puts sprintf("num: %i, verse: %s", $~[:num], $~[:verse])
+      # check that current line contains footnote
+      unless /href="WLC_001-050\.html#fnB(?'id'\d+)/.match(line).nil?
+        verses = Hash.new
+        # footnote id used as keys in result
+        id = $~[:id]
+        # multiple verses may be present. split and act on this
+        line.split(/<strong>/).each do |l|
+          unless /(?'verse'^[\w|\s|\d|:|-]+)\.<\/strong>(?'text'.*)/.match(l).nil?
+            verses[$~[:verse]] = $~[:text]
+          end
+        end
+        # footnote value is hash of passage name, and passage text
+        results[id] = verses
       end
     end
   end
+  return results
 end
 
 def phrases(answer)
