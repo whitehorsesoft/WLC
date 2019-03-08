@@ -1,0 +1,16 @@
+# inherit_from: .rubocop_todo.yml
+
+Metrics:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/TrailingCommaInArrayLiteral:
+  Enabled: false
+
+Layout/SpaceBeforeBlockBraces:
+  Enabled: false
+
+Layout/SpaceInsideBlockBraces:
+  Enabled: false
